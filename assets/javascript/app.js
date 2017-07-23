@@ -33,13 +33,17 @@ var questions = [
 
 ]
 var bigQ;
-	timeCounter = 20;
 	randomId = Math.floor(Math.random() * questions.length);
+	timeCounter = "";
 
 $(document).ready(function(){
 
 	var intervalId;
-	
+	function clearAll (){
+		$("button, .timer, .ask, .timerHeader, .correct, .incorrect, #answer, .answer, .incorrectImage, .correctImage").hide();
+		$("#answer").removeAttr("style");
+		console.log("clean up");
+	}
 	
 
 	function gameRestart(){
@@ -51,59 +55,107 @@ $(document).ready(function(){
 	//display answers
 	function gameBegin(){
 		$("button").on("click", function() {
-		$("#timer").show().append("<h2>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
+			timeCounter = 10;
+		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
 		console.log(timeCounter);
 		console.log(randomId);
-		$("#questionArea").show().append("<span>" + questions[randomId].ask + "</span>");
+		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
 		console.log("question");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
 		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
-		
-		console.log("answer");
+		randomId = randomId + 1;
+		console.log("adding 1 game begin");
 		$("button").hide();
 		timerRunning();
-		correctAnswerSelect();
-		incorrectAnswerSelect();
+		correctAnswerSelect() || incorrectAnswerSelect();
 	});
+
+	
 		
 };
+	function nextQuestion () {
+		clearAll();
+
+		console.log("next question");
+		
+		if(randomId !== questions.length) { 
+		// 	randomId = 0;
+		// 	console.log("this is running") 
+		// }	else {
+
+		timeCounter = 10;
+		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
+		console.log(timeCounter);
+		console.log(randomId);
+		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
+		console.log("question");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
+		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
+		// }
+	
+		randomId = randomId + 1;
+		} else {
+			randomId = 0;
+			nextQuestion()
+		}
+		console.log("adding 1 next question")
+		timerRunning();
+		correctAnswerSelect() || incorrectAnswerSelect();
+	};
 
 	function correctAnswerSelect(){
 		$(".correct").on("click", function(){
 			if(this) {
-			console.log("correct");
-			randomId = randomId++;
-			console.log("random id is going up")
-		}
+				$(".incorrect, .correct, .ask, .timerHeader, .timer, #questionArea").hide();
+				$("#answer").show().append("<span class='correctImage'><img src='https://media2.giphy.com/media/vgUFOWBwBkziE/giphy-preview.gif' /></span>");
+				$("#answer").css("color", "#32cd32");
+				$("#answer").css("margin-top", "180px");
+				console.log("correct");
+				timerStop();
+				setTimeout(nextQuestion, 5000);
+				}
 
-		});
-	};
+			});
+		};
 	function incorrectAnswerSelect(){
 		$(".incorrect").on("click", function(){
 			if(this){
+				$(".incorrect, .correct, .ask, .timerHeader, .timer, #questionArea").hide();
+				$("#answer").show().append("<span class='incorrectImage'><img src='https://media2.giphy.com/media/W5YVAfSttCqre/giphy-preview.gif' /></span>");
+				$("#answer").css("color", "#ff0000");
+				$("#answer").css("margin-top", "180px")
 				console.log("incorrect");
-				randomId = randomId++;
-				
-			}
-		});
+				timerStop();
+				setTimeout(nextQuestion, 5000);
+				}
+			});
 	
-	};
+		};
 
 	intervalId = setInterval(timerRunning, 1000);
 	function timerRunning (){
 		if(timeCounter === 0) {
 			timerStop();
+			nextQuestion();
 			alert("Time's Up");
+		} else if(timeCounter <= 6){
+			timeCounter--;
+			$(".timer").css("color", "#ff0000");
+			$(".timer").html(timeCounter);
 		} else {
 			timeCounter--;
-		$(".timer").html(timeCounter);
+			$(".timer").html(timeCounter);
 		}
 	}
 	function timerStop(){
 		{
 		clearInterval(intervalId);
+
+
 		}
 	}
 
