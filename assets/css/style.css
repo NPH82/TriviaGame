@@ -1,10 +1,28 @@
-.container {
+* {
+	display: block;
+	text-align: center;
+	font-size: 20px;
+}
+body {
 	background-image: url("../images/thumb-1920-16086.jpg");
 	
 }
+h1 {
+	font-size: 80px;
+	font-weight: 400;
+}
 
-/*.gameArea {
+
+.gameArea {
 	width: 100%;
-	height: auto;
+	height: 750px;
 	background-color: #696969;
+	border-color: #000;
+	
+}
+
+
+li:hover {
+	color: #ffa500;
+	font-size: 40px;
 }
