@@ -4,7 +4,7 @@
 var questions = [
 	{	"id": 1,
 		"ask": "What falls off the trees in the fall?",
-		"answer": "leaves",
+		"answer": "Leaves",
 		"incorrectAnswer1": "Squirrels",
 		"incorrectAnswer2": "Snow",
 		"incorrectAnswer3": "Maple Syrup"
@@ -33,7 +33,9 @@ var questions = [
 
 ]
 var bigQ;
-	time = 20;
+	timeCounter = 20;
+	randomId = Math.floor(Math.random() * questions.length);
+
 $(document).ready(function(){
 
 	var intervalId;
@@ -45,52 +47,68 @@ $(document).ready(function(){
 		console.log("start game");
 		};
 
-	function randomQuestion(){
-		for(var i=0; i < questions.length; i++) {
-			bigQ = Math.Floor(Math.random() * questions.length) + 1;
-			
-		}
-	};
-
 	//display question
 	//display answers
 	function gameBegin(){
 		$("button").on("click", function() {
-		$("#timer").show().append("<h2>Time Remaining: " + time + " Seconds</h2>");
-		console.log("timer");
-		$("#questionArea").show().append("<span>" + questions[3].ask + "</span>");
+		$("#timer").show().append("<h2>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
+		console.log(timeCounter);
+		console.log(randomId);
+		$("#questionArea").show().append("<span>" + questions[randomId].ask + "</span>");
 		console.log("question");
-		$("#answer").show().append("<li>" + questions[3].incorrectAnswer1 + "</li>");
-		$("#answer").show().append("<li>" + questions[3].incorrectAnswer2 + "</li>");
-		$("#answer").show().append("<li>" + questions[3].incorrectAnswer3 + "</li>");
-		$("#answer").show().append("<li>" + questions[3].answer + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
+		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
 		
 		console.log("answer");
 		$("button").hide();
 		timerRunning();
+		correctAnswerSelect();
+		incorrectAnswerSelect();
 	});
 		
 };
 
-	function answerSelect(){
-		
-		$("questions[3].answer").on("click", function(){
+	function correctAnswerSelect(){
+		$(".correct").on("click", function(){
+			if(this) {
 			console.log("correct");
-	});
-	}
+			randomId = randomId++;
+			console.log("random id is going up")
+		}
 
-	function timerStart() {
-		timerStart = true;
-		time--;
-		$("#timer").html(time);
-		console.log(time)
-	}
+		});
+	};
+	function incorrectAnswerSelect(){
+		$(".incorrect").on("click", function(){
+			if(this){
+				console.log("incorrect");
+				randomId = randomId++;
+				
+			}
+		});
+	
+	};
 
+	intervalId = setInterval(timerRunning, 1000);
 	function timerRunning (){
-		intervalId = setInterval(time, 1000);
+		if(timeCounter === 0) {
+			timerStop();
+			alert("Time's Up");
+		} else {
+			timeCounter--;
+		$(".timer").html(timeCounter);
+		}
 	}
- 	
-	//answerSelect();
+	function timerStop(){
+		{
+		clearInterval(intervalId);
+		}
+	}
+
+
+	
 	gameBegin();
 
 
