@@ -32,7 +32,7 @@ var questions = [
 	}
 
 ]
-var bigQ;
+var startId = "";
 	randomId = Math.floor(Math.random() * questions.length);
 	timeCounter = "";
 
@@ -56,36 +56,43 @@ $(document).ready(function(){
 	function gameBegin(){
 		$("button").on("click", function() {
 			timeCounter = 10;
+			startId = randomId;
 		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
 		console.log(timeCounter);
 		console.log(randomId);
-		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
+		$("#questionArea").show().append("<span class='ask'>" + questions[startId].ask + "</span>");
 		console.log("question");
-		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
-		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
-		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
-		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[startId].incorrectAnswer1 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[startId].incorrectAnswer2 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[startId].incorrectAnswer3 + "</li>");
+		$("#answer").show().append("<li class='correct'>" + questions[startId].answer + "</li>");
 		randomId = randomId + 1;
 		console.log("adding 1 game begin");
 		$("button").hide();
 		timerRunning();
 		correctAnswerSelect() || incorrectAnswerSelect();
 	});
-
-	
 		
 };
+
+	function checkRandomId (){
+		if(randomId === questions.length) {
+			randomId = 0;
+		} else if(randomId === startId) {
+			alert ("finished");
+			return false;
+		}
+	}
+
 	function nextQuestion () {
 		clearAll();
 
 		console.log("next question");
-		
-		if(randomId !== questions.length) { 
-		// 	randomId = 0;
-		// 	console.log("this is running") 
-		// }	else {
-
+		checkRandomId();
+		if(randomId !== questions.length) {
 		timeCounter = 10;
+		intervalId = setInterval(timerRunning, 1000);
+		//timerRunning();
 		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
 		console.log(timeCounter);
 		console.log(randomId);
@@ -95,17 +102,29 @@ $(document).ready(function(){
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
 		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
-		// }
-	
+		console.log("the glitch starts here")
+		 // } else if (randomId === questions.length){
+			// randomId = 0;
+			// return true;
+			// console.log("glitch here")
+		// } else if (randomId === startId){
+		// 	alert("finished")
+		// 	return false;
+		} 
 		randomId = randomId + 1;
-		} else {
-			randomId = 0;
-			nextQuestion()
-		}
+		console.log("please tell me this works")
 		console.log("adding 1 next question")
-		timerRunning();
-		correctAnswerSelect() || incorrectAnswerSelect();
+		correctAnswerSelect();
+		console.log("problems here")
+		incorrectAnswerSelect();
+		console.log("it makes it around here")
 	};
+
+	// function checkRandomId (){
+	// 	if(randomId === questions.length) {
+	// 		randomId = 0;
+	// 	}
+	// };
 
 	function correctAnswerSelect(){
 		$(".correct").on("click", function(){
