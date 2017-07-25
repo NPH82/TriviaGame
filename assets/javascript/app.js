@@ -1,9 +1,7 @@
-//setTimeout(begin, 0);
-//setTimeout(timeup, 1000 * 20);
 
 var questions = [
 	{	"id": 1,
-		"ask": "What falls off the trees in the fall?",
+		"ask": "What drops off the trees in the fall?",
 		"answer": "Leaves",
 		"incorrectAnswer1": "Squirrels",
 		"incorrectAnswer2": "Snow",
@@ -29,26 +27,42 @@ var questions = [
 		"incorrectAnswer1": "Macoun",
 		"incorrectAnswer2": "Braeburn",
 		"incorrectAnswer3": "Baldwin"
+	},
+	{	"id": 5,
+		"ask": "Which holiday is not during the fall?",
+		"answer": "Flag Day",
+		"incorrectAnswer1": "Halloween",
+		"incorrectAnswer2": "Columbus Day",
+		"incorrectAnswer3": "Veteran's Day"
+	},
+	{	"id": 6,
+		"ask": "Which is a seasonal beverage in the fall?",
+		"answer": "Pumpkin Spiced Latte",
+		"incorrectAnswer1": "Chocolate Milk",
+		"incorrectAnswer2": "Cappuccino",
+		"incorrectAnswer3": "Lemon Water"
 	}
 
 ]
 var startId = "";
 	randomId = Math.floor(Math.random() * questions.length);
 	timeCounter = "";
+	correctClick = 0;
+	incorrectClick = 0;
+	noClick = 0;
 
-$(document).ready(function(){
+
+ $(document).ready(function(){
 
 	var intervalId;
 	function clearAll (){
 		$("button, .timer, .ask, .timerHeader, .correct, .incorrect, #answer, .answer, .incorrectImage, .correctImage").hide();
 		$("#answer").removeAttr("style");
-		console.log("clean up");
 	}
 	
 
 	function gameRestart(){
 		$("#timer, #questionArea, #answer").hide();
-		console.log("start game");
 		};
 
 	//display question
@@ -58,16 +72,13 @@ $(document).ready(function(){
 			timeCounter = 10;
 			startId = randomId;
 		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
-		console.log(timeCounter);
-		console.log(randomId);
 		$("#questionArea").show().append("<span class='ask'>" + questions[startId].ask + "</span>");
-		console.log("question");
 		$("#answer").show().append("<li class='incorrect'>" + questions[startId].incorrectAnswer1 + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[startId].incorrectAnswer2 + "</li>");
-		$("#answer").show().append("<li class='incorrect'>" + questions[startId].incorrectAnswer3 + "</li>");
 		$("#answer").show().append("<li class='correct'>" + questions[startId].answer + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[startId].incorrectAnswer3 + "</li>");
+		
 		randomId = randomId + 1;
-		console.log("adding 1 game begin");
 		$("button").hide();
 		timerRunning();
 		correctAnswerSelect() || incorrectAnswerSelect();
@@ -78,53 +89,81 @@ $(document).ready(function(){
 	function checkRandomId (){
 		if(randomId === questions.length) {
 			randomId = 0;
+			nextQuestion3();
+		} else if (randomId === (4 || 1) && randomId !== startId) {
+			nextQuestion2();
+		} else if (randomId === (2 || 5) && randomId !== startId) {
+			nextQuestion();
+		} else if(randomId === (3 || 6) && randomId !== startId) {
+			nextQuestion3();
 		} else if(randomId === startId) {
-			alert ("finished");
-			return false;
+			randomId = false;
+			console.log("this is called")
+			gameEnd();
+		} else {
+			nextQuestion();
 		}
 	}
 
 	function nextQuestion () {
 		clearAll();
-
 		console.log("next question");
-		checkRandomId();
 		if(randomId !== questions.length) {
 		timeCounter = 10;
 		intervalId = setInterval(timerRunning, 1000);
-		//timerRunning();
 		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
 		console.log(timeCounter);
 		console.log(randomId);
 		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
-		console.log("question");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
+		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
+		} 
+		randomId = randomId + 1;
+		correctAnswerSelect();
+		incorrectAnswerSelect();
+	};
+
+	function nextQuestion2 () {
+		clearAll();
+		console.log("next question");
+		if(randomId !== questions.length) {
+		timeCounter = 10;
+		intervalId = setInterval(timerRunning, 1000);
+		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
+		console.log(timeCounter);
+		console.log(randomId);
+		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
 		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
-		console.log("the glitch starts here")
-		 // } else if (randomId === questions.length){
-			// randomId = 0;
-			// return true;
-			// console.log("glitch here")
-		// } else if (randomId === startId){
-		// 	alert("finished")
-		// 	return false;
 		} 
 		randomId = randomId + 1;
-		console.log("please tell me this works")
-		console.log("adding 1 next question")
 		correctAnswerSelect();
-		console.log("problems here")
 		incorrectAnswerSelect();
-		console.log("it makes it around here")
 	};
 
-	// function checkRandomId (){
-	// 	if(randomId === questions.length) {
-	// 		randomId = 0;
-	// 	}
-	// };
+	function nextQuestion3 () {
+		clearAll();
+		console.log("next question");
+		if(randomId !== questions.length) {
+		timeCounter = 10;
+		intervalId = setInterval(timerRunning, 1000);
+		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
+		console.log(timeCounter);
+		console.log(randomId);
+		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
+		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
+		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer3 + "</li>");
+		} 
+		randomId = randomId + 1;
+		correctAnswerSelect();
+		incorrectAnswerSelect();
+	};
 
 	function correctAnswerSelect(){
 		$(".correct").on("click", function(){
@@ -134,8 +173,9 @@ $(document).ready(function(){
 				$("#answer").css("color", "#32cd32");
 				$("#answer").css("margin-top", "180px");
 				console.log("correct");
+				correctClick++;
 				timerStop();
-				setTimeout(nextQuestion, 5000);
+				setTimeout(checkRandomId, 5000);
 				}
 
 			});
@@ -148,19 +188,37 @@ $(document).ready(function(){
 				$("#answer").css("color", "#ff0000");
 				$("#answer").css("margin-top", "180px")
 				console.log("incorrect");
+				incorrectClick++;
 				timerStop();
-				setTimeout(nextQuestion, 5000);
+				setTimeout(checkRandomId, 5000);
 				}
 			});
-	
 		};
+
+	function headChange(){
+		var headerChange = document.getElementById("answer");
+		headerChange.querySelector(".answerHead").innerHTML = "Results";
+	};	
+
+	function gameEnd(){
+		clearInterval(intervalId);
+		$("button, .timer, .ask, .timerHeader, .correct, .incorrect, .answer, .incorrectImage, .correctImage").hide();
+		$("#timer, #answer, #questionArea").hide();
+		$("#answer").removeAttr("style");
+		headChange();
+		$("#answer").show().append("<span class='rightAnswer'>You got " + correctClick + " questions correct!</span>");
+		$("#answer").show().append("<span class='wrongAnswer'>You got " + incorrectClick + " questions incorrect!</span>");
+		$("#answer").show().append("<span class='wrongAnswer'>You were unable to answer " + noClick + " questions!</span>");
+		$("#answer").show().append("<a href='index.html' class='btn btn-warning btn-lg btn-block' style='vertical-align: middle'><strong>PLAY AGAIN ?</strong></a>");
+	}
 
 	intervalId = setInterval(timerRunning, 1000);
 	function timerRunning (){
 		if(timeCounter === 0) {
+			noClick++;
 			timerStop();
 			nextQuestion();
-			alert("Time's Up");
+			//alert("Time's Up");
 		} else if(timeCounter <= 6){
 			timeCounter--;
 			$(".timer").css("color", "#ff0000");
@@ -170,11 +228,10 @@ $(document).ready(function(){
 			$(".timer").html(timeCounter);
 		}
 	}
+
 	function timerStop(){
 		{
 		clearInterval(intervalId);
-
-
 		}
 	}
 
