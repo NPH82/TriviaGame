@@ -53,7 +53,7 @@ var startId = "";
 
 
  $(document).ready(function(){
-
+ 	$("title").hide();
 	var intervalId;
 	function clearAll (){
 		$("button, .timer, .ask, .timerHeader, .correct, .incorrect, #answer, .answer, .incorrectImage, .correctImage").hide();
