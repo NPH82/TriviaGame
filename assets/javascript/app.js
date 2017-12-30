@@ -63,10 +63,10 @@ var startId = "";
 
 	function gameRestart(){
 		$("#timer, #questionArea, #answer").hide();
+		gameBegin();
 		};
 
 	//display question
-	//display answers
 	function gameBegin(){
 		$("button").on("click", function() {
 			timeCounter = 10;
@@ -86,6 +86,7 @@ var startId = "";
 		
 };
 
+	//random question logic
 	function checkRandomId (){
 		if(randomId === questions.length) {
 			randomId = 0;
@@ -98,7 +99,6 @@ var startId = "";
 			nextQuestion3();
 		} else if(randomId === startId) {
 			randomId = false;
-			console.log("this is called")
 			gameEnd();
 		} else {
 			nextQuestion();
@@ -107,13 +107,10 @@ var startId = "";
 
 	function nextQuestion () {
 		clearAll();
-		console.log("next question");
 		if(randomId !== questions.length) {
 		timeCounter = 10;
 		intervalId = setInterval(timerRunning, 1000);
 		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
-		console.log(timeCounter);
-		console.log(randomId);
 		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
 		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
@@ -127,13 +124,10 @@ var startId = "";
 
 	function nextQuestion2 () {
 		clearAll();
-		console.log("next question");
 		if(randomId !== questions.length) {
 		timeCounter = 10;
 		intervalId = setInterval(timerRunning, 1000);
 		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
-		console.log(timeCounter);
-		console.log(randomId);
 		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer2 + "</li>");
@@ -147,13 +141,10 @@ var startId = "";
 
 	function nextQuestion3 () {
 		clearAll();
-		console.log("next question");
 		if(randomId !== questions.length) {
 		timeCounter = 10;
 		intervalId = setInterval(timerRunning, 1000);
 		$("#timer").show().append("<h2 class='timerHeader'>Time Remaining: <span class='timer'>" + timeCounter + " </span>Seconds</h2>");
-		console.log(timeCounter);
-		console.log(randomId);
 		$("#questionArea").show().append("<span class='ask'>" + questions[randomId].ask + "</span>");
 		$("#answer").show().append("<li class='correct'>" + questions[randomId].answer + "</li>");
 		$("#answer").show().append("<li class='incorrect'>" + questions[randomId].incorrectAnswer1 + "</li>");
@@ -165,6 +156,7 @@ var startId = "";
 		incorrectAnswerSelect();
 	};
 
+	//track correct answers
 	function correctAnswerSelect(){
 		$(".correct").on("click", function(){
 			if(this) {
@@ -172,7 +164,6 @@ var startId = "";
 				$("#answer").show().append("<span class='correctImage'><img src='https://media2.giphy.com/media/vgUFOWBwBkziE/giphy-preview.gif' /></span>");
 				$("#answer").css("color", "#32cd32");
 				$("#answer").css("margin-top", "180px");
-				console.log("correct");
 				correctClick++;
 				timerStop();
 				setTimeout(checkRandomId, 5000);
@@ -180,6 +171,8 @@ var startId = "";
 
 			});
 		};
+
+	//track incorrect answers	
 	function incorrectAnswerSelect(){
 		$(".incorrect").on("click", function(){
 			if(this){
@@ -187,7 +180,6 @@ var startId = "";
 				$("#answer").show().append("<span class='incorrectImage'><img src='https://media2.giphy.com/media/W5YVAfSttCqre/giphy-preview.gif' /></span>");
 				$("#answer").css("color", "#ff0000");
 				$("#answer").css("margin-top", "180px")
-				console.log("incorrect");
 				incorrectClick++;
 				timerStop();
 				setTimeout(checkRandomId, 5000);
@@ -200,6 +192,7 @@ var startId = "";
 		headerChange.querySelector(".answerHead").innerHTML = "Results";
 	};	
 
+	//results screen
 	function gameEnd(){
 		clearInterval(intervalId);
 		$("button, .timer, .ask, .timerHeader, .correct, .incorrect, .answer, .incorrectImage, .correctImage").hide();
@@ -212,13 +205,14 @@ var startId = "";
 		$("#answer").show().append("<a href='index.html' class='btn btn-warning btn-lg btn-block' style='vertical-align: middle'><strong>PLAY AGAIN ?</strong></a>");
 	}
 
+
+	//start timer
 	intervalId = setInterval(timerRunning, 1000);
 	function timerRunning (){
 		if(timeCounter === 0) {
 			noClick++;
 			timerStop();
 			nextQuestion();
-			//alert("Time's Up");
 		} else if(timeCounter <= 6){
 			timeCounter--;
 			$(".timer").css("color", "#ff0000");
@@ -229,25 +223,12 @@ var startId = "";
 		}
 	}
 
+	//stop timer
 	function timerStop(){
 		{
 		clearInterval(intervalId);
 		}
 	}
 
-
-	
-	gameBegin();
-
-
-//set a timer
-//start at 20 seconds
-//end at 0 seconds
-//display correct of incorrect message
-//reset timer on answer or time run out
-
-//track correct answers
-//track incorrect answers
-//track unanswered
 	gameRestart();
 });
